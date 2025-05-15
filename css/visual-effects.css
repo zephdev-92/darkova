@@ -1,0 +1,99 @@
+/* Images flottantes avec superposition */
+.floating-image-container {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.floating-image {
+    position: absolute;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 1.2s ease;
+}
+
+.floating-image.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.floating-image:nth-child(1) {
+    top: 15%;
+    left: 10%;
+    z-index: 3;
+}
+
+.floating-image:nth-child(2) {
+    top: 30%;
+    right: 15%;
+    z-index: 2;
+}
+
+.floating-image:nth-child(3) {
+    bottom: 20%;
+    left: 20%;
+    z-index: 1;
+}
+
+/* Transitions fluides entre sections */
+.section-transition {
+    position: relative;
+    height: 30vh;
+    overflow: hidden;
+    margin-top: -10vh;
+    z-index: 1;
+}
+
+.section-transition::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+    z-index: 2;
+}
+
+/* Animations au survol */
+.hover-zoom {
+    transition: transform 0.3s ease;
+}
+
+.hover-zoom:hover {
+    transform: scale(1.05);
+}
+
+/* Améliorations pour les séparateurs existants */
+.section-separator {
+    position: relative;
+    overflow: hidden;
+}
+
+.section-separator::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Effet de vignette pour les bords des sections */
+.vignette-effect {
+    position: relative;
+}
+
+.vignette-effect::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+    pointer-events: none;
+}

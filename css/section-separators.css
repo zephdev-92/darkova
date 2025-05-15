@@ -1,0 +1,66 @@
+/* Séparateurs de sections */
+/* Modifications pour les séparateurs de section avec effet parallaxe */
+
+/* Style mis à jour pour les séparateurs */
+.section-separator {
+    position: relative;
+    height: 60vh; /* Hauteur du séparateur, ajustez selon vos besoins */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Modification pour ajouter l'effet parallaxe aux arrière-plans */
+.separator-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* C'est la propriété clé pour l'effet parallaxe */
+    z-index: -1;
+}
+
+/* Le reste des styles reste similaire */
+.separator-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+}
+
+.separator-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: var(--color-light);
+    max-width: 800px;
+    padding: 0 var(--spacing-md);
+}
+
+.separator-title {
+    font-family: var(--font-primary);
+    font-size: 3rem;
+    margin-bottom: var(--spacing-sm);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.separator-subtitle {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+/* Sur mobile, on désactive l'effet fixed */
+@media (max-width: 768px) {
+    .separator-background {
+        background-attachment: scroll;
+    }
+}
