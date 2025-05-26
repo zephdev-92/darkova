@@ -159,16 +159,35 @@ function initScrollAnimations() {
     delay: 0.2
   });
 
-  gsap.from('.follow-card', {
-    scrollTrigger: {
-      trigger: '.follow-grid',
-      start: 'top 80%'
-    },
-    opacity: 0,
-    y: 50,
-    duration: 0.8,
-    stagger: 0.2
-  });
+  // Animation des cartes follow avec fallback
+  const followCards = document.querySelectorAll('.follow-card');
+  if (followCards.length > 0) {
+    // Animation GSAP avec fallback de visibilité
+    gsap.fromTo('.follow-card',
+      {
+        opacity: 0,
+        y: 50
+      },
+      {
+        scrollTrigger: {
+          trigger: '.follow-grid',
+          start: 'top 80%',
+          onComplete: () => {
+            // S'assurer que les cartes restent visibles après l'animation
+            followCards.forEach(card => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            });
+          }
+        },
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: 'power2.out'
+      }
+    );
+  }
 
   // Section Contact
   gsap.from('.section-contact .section-title', {

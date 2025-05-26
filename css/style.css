@@ -461,7 +461,12 @@ section {
 }
 
 /* ======== GRID LAYOUTS ======== */
-.about-grid,
+.about-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  align-items: center;
+}
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -475,7 +480,6 @@ section {
 
 .about-image {
   overflow: hidden;
-  border-radius: 5px;
   box-shadow: var(--shadow-main);
 }
 
@@ -847,6 +851,7 @@ section {
 .section-follow {
   padding: var(--spacing-xl) 0;
   background-color: var(--color-dark);
+  min-height: 50vh;
 }
 
 .follow-description {
@@ -859,6 +864,10 @@ section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: var(--spacing-lg);
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-sm);
 }
 
 .follow-card {
@@ -867,6 +876,10 @@ section {
   border-radius: 5px;
   text-align: center;
   transition: var(--transition-main);
+  min-height: 300px;
+  /* Fallback de visibilité au cas où GSAP ne fonctionne pas */
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .follow-card:hover {
