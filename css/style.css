@@ -762,6 +762,17 @@ section {
   }
 }
 
+/* Menu mobile pour écrans 13 pouces et moins */
+@media (max-width: 1366px) {
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+  .side-nav {
+    display: none;
+  }
+}
+
 @media (max-width: 992px) {
   .container {
     max-width: 720px;
@@ -784,14 +795,6 @@ section {
 
   .container {
     max-width: 540px;
-  }
-
-  .mobile-menu-toggle {
-    display: block;
-  }
-
-  .side-nav {
-    display: none;
   }
 
   .title-main {
