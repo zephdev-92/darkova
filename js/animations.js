@@ -103,7 +103,7 @@ function initScrollAnimations() {
     y: -50
   });
 
-  // Section Séances
+  // Section Séances - Animation des 2 colonnes
   gsap.from('.section-seance .section-title', {
     scrollTrigger: {
       trigger: '.section-seance',
@@ -114,15 +114,44 @@ function initScrollAnimations() {
     duration: 0.8
   });
 
-  gsap.from('.section-seance .content-description', {
+  // Animation des colonnes de séances
+  gsap.from('.seance-column', {
     scrollTrigger: {
-      trigger: '.section-seance .content-description',
+      trigger: '.seances-grid',
       start: 'top 80%'
     },
     opacity: 0,
-    y: 30,
+    y: 50,
+    scale: 0.95,
     duration: 0.8,
-    delay: 0.2
+    stagger: 0.3,
+    ease: 'power2.out'
+  });
+
+  // Animation des titres des colonnes
+  gsap.from('.seance-title', {
+    scrollTrigger: {
+      trigger: '.seances-grid',
+      start: 'top 70%'
+    },
+    opacity: 0,
+    y: 20,
+    duration: 0.6,
+    stagger: 0.2,
+    delay: 0.4
+  });
+
+  // Animation du contenu des colonnes
+  gsap.from('.seance-info, .seance-detail, .seance-requirement, .seance-warning, .seance-cta', {
+    scrollTrigger: {
+      trigger: '.seances-grid',
+      start: 'top 60%'
+    },
+    opacity: 0,
+    y: 20,
+    duration: 0.5,
+    stagger: 0.1,
+    delay: 0.8
   });
 
   // Animation des catégories
