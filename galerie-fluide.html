@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darkova - Fluidité</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Header minimal */
+        .fluid-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 30px 50px;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 10, 0.8);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #d4af37;
+            font-weight: 700;
+        }
+
+        .nav-counter {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 2px;
+        }
+
+        /* Hero Section */
+        .fluid-hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        .hero-text {
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: #fff;
+            margin-bottom: 30px;
+            font-weight: 400;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 50px;
+            font-weight: 300;
+        }
+
+        /* Gallery Container */
+        .fluid-gallery {
+            padding: 100px 0;
+        }
+
+        .gallery-item {
+            margin: 200px 0;
+            position: relative;
+        }
+
+        .gallery-item:first-child {
+            margin-top: 0;
+        }
+
+        /* Different Layout Types */
+        .layout-full {
+            display: grid;
+            grid-template-columns: 1fr;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 50px;
+        }
+
+        .layout-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 50px;
+            align-items: center;
+        }
+
+        .layout-offset {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 50px;
+            align-items: center;
+        }
+
+        .layout-centered {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 0 50px;
+        }
+
+        /* Image Styles */
+        .gallery-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .gallery-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .gallery-image:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Text Styles */
+        .gallery-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .gallery-number {
+            font-size: 0.8rem;
+            color: #d4af37;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .gallery-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 25px;
+            font-weight: 400;
+        }
+
+        .gallery-description {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .gallery-meta {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Parallax Effects */
+        .parallax-slow {
+            transform: translateY(0);
+            transition: transform 0.1s linear;
+        }
+
+        .parallax-fast {
+            transform: translateY(0);
+            transition: transform 0.1s linear;
+        }
+
+        /* Size Variants */
+        .size-large .gallery-image {
+            height: 80vh;
+        }
+
+        .size-medium .gallery-image {
+            height: 60vh;
+        }
+
+        .size-small .gallery-image {
+            height: 40vh;
+        }
+
+        .size-square .gallery-image {
+            aspect-ratio: 1;
+        }
+
+        /* Animation on scroll */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Footer */
+        .fluid-footer {
+            padding: 100px 50px 50px;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 30px;
+        }
+
+        .footer-cta {
+            display: inline-block;
+            padding: 15px 40px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .footer-cta:hover {
+            background: #d4af37;
+            color: #000;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .layout-split,
+            .layout-offset {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .fluid-header {
+                padding: 20px 30px;
+            }
+
+            .layout-full,
+            .layout-split,
+            .layout-offset,
+            .layout-centered {
+                padding: 0 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .gallery-title {
+                font-size: 2rem;
+            }
+
+            .gallery-item {
+                margin: 100px 0;
+            }
+
+            .layout-full,
+            .layout-split,
+            .layout-offset,
+            .layout-centered {
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="fluid-header">
+        <div class="header-content">
+            <div class="logo">DARKOVA</div>
+            <div class="nav-counter" id="navCounter">01 / 08</div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="fluid-hero">
+        <div class="hero-text fade-in">
+            <h1 class="hero-title">Fluidité</h1>
+            <p class="hero-subtitle">Une galerie où chaque image respire, où le silence entre les créations parle autant que les œuvres elles-mêmes.</p>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <main class="fluid-gallery">
+        <!-- Item 1 -->
+        <article class="gallery-item fade-in" data-index="1">
+            <div class="layout-full size-large">
+                <div class="gallery-image parallax-slow">
+                    <img src="https://picsum.photos/1400/800?random=1" alt="Portrait inaugural">
+                </div>
+            </div>
+        </article>
+
+        <!-- Item 2 -->
+        <article class="gallery-item fade-in" data-index="2">
+            <div class="layout-split">
+                <div class="gallery-text">
+                    <div class="gallery-number">002</div>
+                    <h2 class="gallery-title">Première Confidence</h2>
+                    <p class="gallery-description">
+                        Dans l'intimité du regard, une première révélation. Ce portrait capture l'essence
+                        de la vulnérabilité contrôlée, où chaque expression devient une déclaration silencieuse.
+                    </p>
+                    <div class="gallery-meta">Série Intimité • 2025</div>
+                </div>
+                <div class="gallery-image size-medium parallax-fast">
+                    <img src="https://picsum.photos/600/800?random=2" alt="Première confidence">
+                </div>
+            </div>
+        </article>
+
+        <!-- Item 3 -->
+        <article class="gallery-item fade-in" data-index="3">
+            <div class="layout-offset">
+                <div class="gallery-image size-square parallax-slow">
+                    <img src="https://picsum.photos/600/600?random=3" alt="Géométrie du désir">
+                </div>
+                <div class="gallery-text">
+                    <div class="gallery-number">003</div>
+                    <h2 class="gallery-title">Géométrie du Désir</h2>
+                    <p class="gallery-description">
+                        Les lignes s'entrelacent, les ombres dansent. Dans cette composition,
+                        l'art rencontre l'architecture du corps, créant une symphonie visuelle
+                        où chaque angle raconte une histoire.
+                    </p>
+                    <div class="gallery-meta">Collection Abstraite • 2025</div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Item 4 -->
+        <article class="gallery-item fade-in" data-index="4">
+            <div class="layout-centered">
+                <div class="gallery-number">004</div>
+                <h2 class="gallery-title">Solitude Dorée</h2>
+                <p class="gallery-description">
+                    Un moment suspendu dans le temps, où la lumière caresse la forme
+                    avec une tendresse infinie. La solitude n'est plus absence, mais présence pure.
+                </p>
+                <div class="gallery-meta">Série Lumière • 2025</div>
+                <div class="gallery-image size-medium parallax-fast" style="margin-top: 40px;">
+                    <img src="https://picsum.photos/800/1000?random=4" alt="Solitude dorée">
+                </div>
+            </div>
+        </article>
+
+        <!-- Item 5 -->
+        <article class="gallery-item fade-in" data-index="5">
+            <div class="layout-split">
+                <div class="gallery-image size-large parallax-slow">
+                    <img src="https://picsum.photos/700/900?random=5" alt="Métamorphose">
+                </div>
+                <div class="gallery-text">
+                    <div class="gallery-number">005</div>
+                    <h2 class="gallery-title">Métamorphose</h2>
+                    <p class="gallery-description">
+                        Capturer l'instant où l'être se transforme, où l'identité fluide
+                        révèle ses multiples facettes. Chaque métamorphose est un nouveau commencement.
+                    </p>
+                    <div class="gallery-meta">Série Évolution • 2025</div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Item 6 -->
+        <article class="gallery-item fade-in" data-index="6">
+            <div class="layout-full size-medium">
+                <div class="gallery-image parallax-fast">
+                    <img src="https://picsum.photos/1400/600?random=6" alt="Horizon infini">
+                </div>
+            </div>
+        </article>
+
+        <!-- Item 7 -->
+        <article class="gallery-item fade-in" data-index="7">
+            <div class="layout-offset">
+                <div class="gallery-text">
+                    <div class="gallery-number">007</div>
+                    <h2 class="gallery-title">Épilogue Silencieux</h2>
+                    <p class="gallery-description">
+                        Dans le silence qui suit la tempête créative, une dernière confidence.
+                        Ce portrait clôt le chapitre, ouvre mille possibles.
+                    </p>
+                    <div class="gallery-meta">Série Finale • 2025</div>
+                </div>
+                <div class="gallery-image size-large parallax-slow">
+                    <img src="https://picsum.photos/600/900?random=7" alt="Épilogue">
+                </div>
+            </div>
+        </article>
+
+        <!-- Item 8 -->
+        <article class="gallery-item fade-in" data-index="8">
+            <div class="layout-centered">
+                <div class="gallery-number">008</div>
+                <h2 class="gallery-title">∞</h2>
+                <p class="gallery-description">L'art n'a pas de fin, seulement des pauses.</p>
+                <div class="gallery-image size-square parallax-fast" style="margin-top: 40px;">
+                    <img src="https://picsum.photos/600/600?random=8" alt="Infini">
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fluid-footer">
+        <p class="footer-text">
+            Cette galerie n'est qu'un aperçu de l'univers Darkova.<br>
+            Découvrez l'expérience complète dans la collection exclusive.
+        </p>
+        <a href="boutique.html" class="footer-cta">Explorer la Collection</a>
+    </footer>
+
+    <script>
+        // Parallax effect
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.parallax-slow, .parallax-fast');
+
+            parallaxElements.forEach(element => {
+                const speed = element.classList.contains('parallax-slow') ? 0.5 : -0.3;
+                const yPos = -(scrolled * speed);
+                element.style.transform = `translateY(${yPos}px)`;
+            });
+        }
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '-50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Counter update
+        function updateCounter() {
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            const counter = document.getElementById('navCounter');
+            let currentItem = 1;
+
+            galleryItems.forEach((item, index) => {
+                const rect = item.getBoundingClientRect();
+                if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+                    currentItem = index + 1;
+                }
+            });
+
+            counter.textContent = `${currentItem.toString().padStart(2, '0')} / ${galleryItems.length.toString().padStart(2, '0')}`;
+        }
+
+        // Initialize
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Event listeners
+        window.addEventListener('scroll', () => {
+            updateParallax();
+            updateCounter();
+        });
+
+        // Initial calls
+        updateParallax();
+        updateCounter();
+    </script>
+</body>
+</html>

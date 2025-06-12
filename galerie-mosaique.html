@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galerie Darkova - Collection Privée</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Dark Gallery Styles inspired by fetish aesthetics */
+        body {
+            background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+            overflow-x: hidden;
+        }
+
+        .masonry-header {
+            text-align: center;
+            padding: 100px 20px 80px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0707 50%, #000000 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .masonry-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 2px,
+                rgba(212, 175, 55, 0.03) 2px,
+                rgba(212, 175, 55, 0.03) 4px
+            );
+            animation: scanlines 4s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .masonry-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            color: #d4af37;
+            margin-bottom: 20px;
+            text-shadow:
+                2px 2px 4px rgba(0,0,0,0.8),
+                0 0 20px rgba(212, 175, 55, 0.3),
+                0 0 40px rgba(212, 175, 55, 0.1);
+            font-weight: 700;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .masonry-subtitle {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.4rem;
+            color: #999;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.7;
+            font-style: italic;
+            position: relative;
+            z-index: 2;
+        }
+
+        .gallery-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tag {
+            background: linear-gradient(45deg, rgba(212, 175, 55, 0.2), rgba(139, 69, 19, 0.3));
+            color: #d4af37;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .tag:hover {
+            background: linear-gradient(45deg, rgba(212, 175, 55, 0.4), rgba(139, 69, 19, 0.5));
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            transform: scale(1.05);
+        }
+
+        .masonry-container {
+            padding: 80px 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .masonry-grid {
+            display: columns;
+            columns: 4;
+            column-gap: 25px;
+            break-inside: avoid;
+        }
+
+        .masonry-item {
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 25px;
+            break-inside: avoid;
+            opacity: 0;
+            transform: translateY(50px) scale(0.9);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+        }
+
+        .masonry-item.loaded {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .masonry-image {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            background: linear-gradient(45deg, #1a1a1a, #0a0a0a);
+            box-shadow:
+                0 8px 32px rgba(0,0,0,0.6),
+                0 0 0 1px rgba(212, 175, 55, 0.1);
+        }
+
+        .masonry-image:hover {
+            transform: scale(1.03) rotateZ(0.5deg);
+            box-shadow:
+                0 20px 60px rgba(0,0,0,0.8),
+                0 0 0 2px rgba(212, 175, 55, 0.3),
+                0 0 30px rgba(212, 175, 55, 0.2);
+        }
+
+        .masonry-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: all 0.4s ease;
+            filter: contrast(1.1) saturate(1.2);
+        }
+
+        .masonry-image:hover img {
+            filter: contrast(1.3) saturate(1.4) brightness(1.1);
+        }
+
+        .masonry-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                transparent 40%,
+                rgba(0,0,0,0.4) 70%,
+                rgba(0,0,0,0.9) 100%
+            );
+            opacity: 0;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 25px;
+        }
+
+        .masonry-image:hover .masonry-overlay {
+            opacity: 1;
+            background: linear-gradient(
+                transparent 30%,
+                rgba(0,0,0,0.6) 60%,
+                rgba(0,0,0,0.95) 100%
+            );
+        }
+
+        .masonry-info h3 {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .masonry-info p {
+            color: #d4af37;
+            font-size: 0.9rem;
+            margin: 0 0 10px;
+            font-weight: 500;
+        }
+
+        .masonry-category {
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.2);
+            color: #d4af37;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Image size variations */
+        .masonry-item.tall img { height: 450px; object-fit: cover; }
+        .masonry-item.medium img { height: 320px; object-fit: cover; }
+        .masonry-item.short img { height: 280px; object-fit: cover; }
+        .masonry-item.square img { height: 300px; object-fit: cover; }
+        .masonry-item.panoramic img { height: 200px; object-fit: cover; }
+
+        /* Lightbox Styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.8); }
+            to { transform: scale(1); }
+        }
+
+        .lightbox img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            background: rgba(0,0,0,0.7);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(212, 175, 55, 0.8);
+            color: #000;
+        }
+
+        .lightbox-info {
+            position: absolute;
+            bottom: -80px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #fff;
+        }
+
+        .lightbox-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: #d4af37;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .masonry-grid { columns: 3; }
+        }
+
+        @media (max-width: 768px) {
+            .masonry-grid { columns: 2; column-gap: 20px; }
+            .masonry-item { margin-bottom: 20px; }
+            .masonry-title { font-size: 3rem; }
+            .gallery-tags { gap: 10px; }
+            .tag { padding: 6px 12px; font-size: 0.8rem; }
+        }
+
+        @media (max-width: 480px) {
+            .masonry-grid { columns: 1; }
+            .masonry-title { font-size: 2.5rem; }
+        }
+
+        /* Floating Action Button - Enhanced */
+        .floating-cta {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #d4af37, #b8941f);
+            color: #000;
+            border-radius: 50px;
+            padding: 15px 25px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow:
+                0 8px 25px rgba(212, 175, 55, 0.4),
+                0 0 0 1px rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .floating-cta:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow:
+                0 15px 40px rgba(212, 175, 55, 0.6),
+                0 0 30px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Enhanced Loading Animation */
+        .loading-indicator {
+            text-align: center;
+            padding: 60px;
+            color: #d4af37;
+            font-size: 1.2rem;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(212, 175, 55, 0.2);
+            border-top: 3px solid #d4af37;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Particle Effect */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: #d4af37;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle Effect -->
+    <div class="particles" id="particles"></div>
+
+    <main>
+        <!-- Enhanced Header -->
+        <section class="masonry-header">
+            <h1 class="masonry-title">Collection Privée</h1>
+            <p class="masonry-subtitle">
+                "Entrez dans mon univers où l'art, la sensualité et l'autorité se rencontrent.
+                Chaque image raconte une histoire de pouvoir, d'élégance et de mystère."
+            </p>
+
+            <div class="gallery-tags">
+                <span class="tag" data-filter="all">Toutes</span>
+                <span class="tag" data-filter="dominance">Dominance</span>
+                <span class="tag" data-filter="elegance">Élégance</span>
+                <span class="tag" data-filter="latex">Latex & Cuir</span>
+                <span class="tag" data-filter="sensual">Sensualité</span>
+                <span class="tag" data-filter="power">Pouvoir</span>
+                <span class="tag" data-filter="fetish">Fétichisme</span>
+            </div>
+        </section>
+
+        <!-- Enhanced Gallery -->
+        <section class="masonry-container">
+            <div class="masonry-grid" id="masonryGrid">
+                <!-- Images will be loaded dynamically -->
+            </div>
+
+            <div class="loading-indicator" id="loadingIndicator">
+                <div class="loading-spinner"></div>
+                <p>Dévoilement de nouvelles créations...</p>
+            </div>
+        </section>
+
+        <!-- Enhanced Floating CTA -->
+        <a href="boutique.html" class="floating-cta">🖤 Boutique Exclusive</a>
+    </main>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <span class="lightbox-close" id="lightboxClose">&times;</span>
+            <img id="lightboxImage" src="" alt="">
+            <div class="lightbox-info">
+                <h3 id="lightboxTitle"></h3>
+                <p id="lightboxCollection"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced image data with fetish-inspired themes
+        const imageData = [
+            { id: 1, title: "Autorité Suprême", collection: "Série Dominance", size: "tall", category: "dominance" },
+            { id: 2, title: "Latex Noir", collection: "Collection Fétiche", size: "medium", category: "latex" },
+            { id: 3, title: "Regard de Maîtresse", collection: "Série Pouvoir", size: "short", category: "power" },
+            { id: 4, title: "Cuir et Dentelle", collection: "Art Sensuel", size: "square", category: "sensual" },
+            { id: 5, title: "Reine de la Nuit", collection: "Collection Royauté", size: "tall", category: "elegance" },
+            { id: 6, title: "Silhouette Fatale", collection: "Série Mystère", size: "medium", category: "dominance" },
+            { id: 7, title: "Corset d'Acier", collection: "Mode Autoritaire", size: "short", category: "fetish" },
+            { id: 8, title: "Velours Pourpre", collection: "Collection Luxure", size: "square", category: "sensual" },
+            { id: 9, title: "Déesse Cruelle", collection: "Série Divine", size: "tall", category: "power" },
+            { id: 10, title: "Géométrie Parfaite", collection: "Art Moderne", size: "panoramic", category: "elegance" },
+            { id: 11, title: "Latex Rouge Sang", collection: "Collection Intense", size: "medium", category: "latex" },
+            { id: 12, title: "Soie et Chaînes", collection: "Dualité Luxe", size: "short", category: "fetish" },
+            { id: 13, title: "Or et Obsidienne", collection: "Série Précieuse", size: "square", category: "elegance" },
+            { id: 14, title: "Force Tranquille", collection: "Portrait Intime", size: "tall", category: "dominance" },
+            { id: 15, title: "Lumière Dorée", collection: "Série Illumination", size: "medium", category: "sensual" },
+            { id: 16, title: "Perfection Absolue", collection: "Collection Elite", size: "short", category: "power" },
+            { id: 17, title: "Séduction Fatale", collection: "Série Charme", size: "square", category: "sensual" },
+            { id: 18, title: "Art Corporel", collection: "Expression Pure", size: "tall", category: "fetish" },
+            { id: 19, title: "Maîtresse du Temps", collection: "Série Éternité", size: "panoramic", category: "dominance" },
+            { id: 20, title: "Cuir Noir Brillant", collection: "Collection Fetish", size: "medium", category: "latex" }
+        ];
+
+        let currentIndex = 0;
+        const batchSize = 8;
+        const grid = document.getElementById('masonryGrid');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        let currentFilter = 'all';
+
+        // Particle system
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = particle.style.height = Math.random() * 3 + 1 + 'px';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                particles.appendChild(particle);
+            }
+        }
+
+        function createMasonryItem(data) {
+            const item = document.createElement('div');
+            item.className = `masonry-item ${data.size}`;
+            item.dataset.category = data.category;
+
+            item.innerHTML = `
+                <div class="masonry-image" data-id="${data.id}" data-title="${data.title}" data-collection="${data.collection}">
+                    <img src="https://picsum.photos/400/600?random=${data.id}"
+                         alt="${data.title}"
+                         loading="lazy">
+                    <div class="masonry-overlay">
+                        <div class="masonry-info">
+                            <h3>${data.title}</h3>
+                            <p>${data.collection}</p>
+                            <span class="masonry-category">${data.category}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            return item;
+        }
+
+        function loadBatch() {
+            const fragment = document.createDocumentFragment();
+            const filteredData = currentFilter === 'all'
+                ? imageData
+                : imageData.filter(item => item.category === currentFilter);
+
+            const endIndex = Math.min(currentIndex + batchSize, filteredData.length);
+
+            for (let i = currentIndex; i < endIndex; i++) {
+                if (filteredData[i]) {
+                    const item = createMasonryItem(filteredData[i]);
+                    fragment.appendChild(item);
+                }
+            }
+
+            grid.appendChild(fragment);
+            currentIndex = endIndex;
+
+            // Staggered animation
+            setTimeout(() => {
+                const newItems = grid.querySelectorAll('.masonry-item:not(.loaded)');
+                newItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('loaded');
+                    }, index * 150);
+                });
+            }, 100);
+
+            if (currentIndex >= filteredData.length) {
+                loadingIndicator.style.display = 'none';
+            }
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                document.querySelectorAll('.tag').forEach(t => t.style.background = '');
+                tag.style.background = 'linear-gradient(45deg, rgba(212, 175, 55, 0.6), rgba(139, 69, 19, 0.7))';
+
+                currentFilter = tag.dataset.filter;
+                currentIndex = 0;
+                grid.innerHTML = '';
+                loadingIndicator.style.display = 'block';
+                loadBatch();
+            });
+        });
+
+        // Lightbox functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightboxImage');
+        const lightboxTitle = document.getElementById('lightboxTitle');
+        const lightboxCollection = document.getElementById('lightboxCollection');
+        const lightboxClose = document.getElementById('lightboxClose');
+
+        function openLightbox(imgSrc, title, collection) {
+            lightboxImage.src = imgSrc;
+            lightboxTitle.textContent = title;
+            lightboxCollection.textContent = collection;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Event listeners
+        grid.addEventListener('click', (e) => {
+            const imageDiv = e.target.closest('.masonry-image');
+            if (imageDiv) {
+                const img = imageDiv.querySelector('img');
+                const title = imageDiv.dataset.title;
+                const collection = imageDiv.dataset.collection;
+                openLightbox(img.src, title, collection);
+            }
+        });
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // Intersection Observer for infinite scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && currentIndex < imageData.length) {
+                    setTimeout(() => {
+                        loadBatch();
+                    }, 600);
+                }
+            });
+        }, {
+            rootMargin: '300px'
+        });
+
+        // Initialize
+        createParticles();
+        loadBatch();
+
+        if (currentIndex < imageData.length) {
+            observer.observe(loadingIndicator);
+        }
+
+        // Smooth scroll for floating CTA
+        document.querySelector('.floating-cta').addEventListener('click', (e) => {
+            e.preventDefault();
+            // Add smooth transition effect
+            document.body.style.transition = 'all 0.5s ease';
+            setTimeout(() => {
+                window.location.href = 'boutique.html';
+            }, 300);
+        });
+    </script>
+</body>
+</html>
